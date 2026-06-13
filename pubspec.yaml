@@ -87,6 +87,9 @@ flutter:
         - asset: assets/fonts/Poppins-Medium.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+    - family: InterMedium
+      fonts:
+        - asset: assets\fonts\Inter_18pt-Medium.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

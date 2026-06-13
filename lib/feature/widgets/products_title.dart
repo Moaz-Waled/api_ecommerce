@@ -1,6 +1,6 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
-import 'package:e_commerce/feature/pages/view_all_page.dart';
+import 'package:e_commerce/feature/pages/view_products_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductsTitle extends StatelessWidget {
@@ -16,7 +16,7 @@ class ProductsTitle extends StatelessWidget {
           onTap: () {
             Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (context) => ViewAllPage()));
+            ).push(MaterialPageRoute(builder: (context) => ViewProductsPage()));
           },
           child: Text(
             'View all',

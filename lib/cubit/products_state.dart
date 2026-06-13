@@ -32,16 +32,16 @@ final class GetCategoriesSuccess extends ProductsState {
   GetCategoriesSuccess({required this.categories});
 }
 
-final class GetAllProductsLoading extends ProductsState {}
+final class ViewProductsLoading extends ProductsState {}
 
-final class GetAllProductsFailure extends ProductsState {
+final class ViewProductsFailure extends ProductsState {
   final String errorMessage;
 
-  GetAllProductsFailure({required this.errorMessage});
+  ViewProductsFailure({required this.errorMessage});
 }
 
-final class GetAllProductsSuccess extends ProductsState {
+final class ViewProductsSuccess extends ProductsState {
   final List<ProductsModel> products;
 
-  GetAllProductsSuccess({required this.products});
+  ViewProductsSuccess({required this.products});
 }

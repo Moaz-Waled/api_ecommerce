@@ -28,12 +28,22 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   Future<void> getAllProducts() async {
-    emit(GetAllProductsLoading());
+    emit(ViewProductsLoading());
     final response = await productsRepo.getAllProducts();
 
     response.fold(
-      (errorMessage) => emit(GetAllProductsFailure(errorMessage: errorMessage)),
-      (products) => emit(GetAllProductsSuccess(products: products)),
+      (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(ViewProductsSuccess(products: products)),
+    );
+  }
+
+  Future<void> getCategoryProducts(String categorySlug) async {
+    emit(ViewProductsLoading());
+    final response = await productsRepo.getCategoryProducts(categorySlug);
+
+    response.fold(
+      (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(ViewProductsSuccess(products: products)),
     );
   }
 }

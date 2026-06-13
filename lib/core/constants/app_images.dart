@@ -25,4 +25,7 @@ class AppIcons {
   static String activeHome = 'assets/icons/activeHome.png';
   static String cart = 'assets/icons/cart.png';
   static String favourites = 'assets/icons/favourites.png';
+  static String arrowLeft = 'assets/icons/arrowLeft.png';
+  static String edit = 'assets/icons/edit.png';
+  static String menu = 'assets/icons/menu.png';
 }

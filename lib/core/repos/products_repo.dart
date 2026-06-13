@@ -48,4 +48,20 @@ class ProductsRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, List<ProductsModel>>> getCategoryProducts(
+    String categorySlug,
+  ) async {
+    try {
+      final response = await api.get(
+        ApiEndpoint.getCategoryProducts(categorySlug),
+      );
+      final products = (response['products'] as List)
+          .map((e) => ProductsModel.fromJson(e))
+          .toList();
+      return Right(products);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

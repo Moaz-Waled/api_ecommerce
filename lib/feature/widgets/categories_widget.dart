@@ -1,6 +1,7 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
 import 'package:e_commerce/core/models/categories/categories_model.dart';
+import 'package:e_commerce/feature/pages/view_products_page.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesWidget extends StatelessWidget {
@@ -18,7 +19,13 @@ class CategoriesWidget extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ViewProductsPage(category: category),
+                ),
+              );
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.secondryColor,
