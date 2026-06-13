@@ -1,5 +1,6 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
+import 'package:e_commerce/feature/pages/view_all_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductsTitle extends StatelessWidget {
@@ -12,7 +13,11 @@ class ProductsTitle extends StatelessWidget {
       children: [
         Text('Latest', style: AppTextStyle.body(size: 20)),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => ViewAllPage()));
+          },
           child: Text(
             'View all',
             style: AppTextStyle.body(size: 12, color: AppColors.borderColor),

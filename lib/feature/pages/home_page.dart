@@ -1,5 +1,7 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
+import 'package:e_commerce/core/models/categories/categories_model.dart';
+import 'package:e_commerce/core/models/products/products_model.dart';
 import 'package:e_commerce/cubit/products_cubit.dart';
 import 'package:e_commerce/cubit/products_state.dart';
 import 'package:e_commerce/feature/widgets/banner_view.dart';
@@ -21,8 +23,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<CategoriesModel> categories = [];
+  List<ProductsModel> products = [];
+
   @override
   void initState() {
+    context.read<ProductsCubit>().getCategories();
     context.read<ProductsCubit>().getProducts();
     super.initState();
   }
@@ -31,14 +37,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProductsCubit, ProductsState>(
       listener: (context, state) {
-        if (state is Failure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
-        } else if (state is GetProductsSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Done')));
+        if (state is GetCategoriesSuccess) {
+          categories = state.categories;
+        }
+        if (state is GetProductsSuccess) {
+          products = state.products;
         }
       },
       builder: (context, state) {
@@ -50,29 +53,35 @@ class _HomePageState extends State<HomePage> {
             title: HomeBarTitle(),
             actions: [NotificationIcon(onTap: () {})],
           ),
-          body: Column(
-            children: [
-              SearchTextField(),
-              const SizedBox(height: 16),
-              SizedBox(height: 200, child: BannersView()),
-              const SizedBox(height: 24),
-              SizedBox(height: 135, child: CategoriesWidget()),
-              ProductsTitle(),
-              const SizedBox(height: 12),
-              state is Loading
-                  ? Center(child: CircularProgressIndicator())
-                  : state is Failure
-                  ? Text(
-                      'Something went wrong',
-                      style: AppTextStyle.body(size: 14),
-                    )
-                  : Expanded(
-                      child: ProductsWidget(
-                        products: (state as GetProductsSuccess).products,
-                      ),
+          body: state is GetCategoriesLoading || state is GetProductsLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.secondryColor,
+                  ),
+                )
+              : state is GetCategoriesFailure || state is GetProductsFailure
+              ? Center(
+                  child: Text(
+                    'Somthing went wrong',
+                    style: AppTextStyle.body(size: 16),
+                  ),
+                )
+              : Column(
+                  children: [
+                    SearchTextField(),
+                    const SizedBox(height: 16),
+                    SizedBox(height: 200, child: BannersView()),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 45,
+                      child: CategoriesWidget(categories: categories),
                     ),
-            ],
-          ),
+                    const SizedBox(height: 32),
+                    ProductsTitle(),
+                    const SizedBox(height: 12),
+                    Expanded(child: ProductsWidget(products: products)),
+                  ],
+                ),
         );
       },
     );

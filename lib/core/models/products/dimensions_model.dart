@@ -1,7 +1,7 @@
 class DimensionsModel {
-  final double width;
-  final double height;
-  final double depth;
+  final num width;
+  final num height;
+  final num depth;
 
   DimensionsModel({
     required this.width,
@@ -11,9 +11,9 @@ class DimensionsModel {
 
   factory DimensionsModel.fromJson(Map<String, dynamic> json) {
     return DimensionsModel(
-      width: json['width'] as double,
-      height: json['height'] as double,
-      depth: json['depth'] as double,
+      width: json['width'] as num,
+      height: json['height'] as num,
+      depth: json['depth'] as num,
     );
   }
 }

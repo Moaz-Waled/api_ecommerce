@@ -8,12 +8,32 @@ class ProductsCubit extends Cubit<ProductsState> {
   final ProductsRepo productsRepo;
 
   Future<void> getProducts() async {
-    emit(Loading());
+    emit(GetProductsLoading());
     final response = await productsRepo.getProducts();
 
     response.fold(
-      (errorMessage) => emit(Failure(errorMessage: errorMessage)),
+      (errorMessage) => emit(GetProductsFailure(errorMessage: errorMessage)),
       (products) => emit(GetProductsSuccess(products: products)),
+    );
+  }
+
+  Future<void> getCategories() async {
+    emit(GetCategoriesLoading());
+    final response = await productsRepo.getCategories();
+
+    response.fold(
+      (errorMessage) => emit(GetCategoriesFailure(errorMessage: errorMessage)),
+      (categories) => emit(GetCategoriesSuccess(categories: categories)),
+    );
+  }
+
+  Future<void> getAllProducts() async {
+    emit(GetAllProductsLoading());
+    final response = await productsRepo.getAllProducts();
+
+    response.fold(
+      (errorMessage) => emit(GetAllProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(GetAllProductsSuccess(products: products)),
     );
   }
 }
