@@ -1,93 +1,57 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_images.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
+import 'package:e_commerce/core/models/products/products_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductsWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> products = [
-    {
-      'name': 'One shoulder Top',
-      'price': 15.00,
-      'hasDiscount': true,
-      'discount': 0.20,
-      'priceAfterDiscount': 10.00,
-      'image': AppImages.product1,
-      'liked': false,
-    },
-    {
-      'name': 'Cinched Waist Top',
-      'price': 8.00,
-      'hasDiscount': false,
-      'discount': 0.00,
-      'priceAfterDiscount': 8.00,
-      'image': AppImages.product2,
-      'liked': false,
-    },
-    {
-      'name': 'Off Shoulder Top',
-      'price': 6.00,
-      'hasDiscount': false,
-      'discount': 0.00,
-      'priceAfterDiscount': 6.00,
-      'image': AppImages.product3,
-      'liked': false,
-    },
-    {
-      'name': 'Crop Top',
-      'price': 6.00,
-      'hasDiscount': true,
-      'discount': 0.33,
-      'priceAfterDiscount': 4.00,
-      'image': AppImages.product4,
-      'liked': false,
-    },
-  ];
+  final List<ProductsModel> products;
 
-  ProductsWidget({super.key});
+  const ProductsWidget({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       itemCount: products.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 0.66,
+        childAspectRatio: 0.58,
         crossAxisSpacing: 15,
         crossAxisCount: 2,
       ),
-      itemBuilder: (context, index) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ProductImageWidget(products: products, index: index),
-              if (products[index]['hasDiscount'])
-                DiscountRateWidget(products: products, index: index),
-              LikeProductWidget(products: products, index: index),
-            ],
-          ),
-          Text(products[index]['name'], style: AppTextStyle.body(size: 16)),
-          ProductPriceWidget(products: products, index: index),
-        ],
-      ),
+      itemBuilder: (context, index) {
+        ProductsModel product = products[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                ProductImageWidget(product: product),
+                if (product.discountPercentage != 0.0)
+                  DiscountRateWidget(product: product),
+                LikeProductWidget(product: product),
+              ],
+            ),
+            Text(product.title, style: AppTextStyle.body(size: 16)),
+            ProductPriceWidget(product: product),
+          ],
+        );
+      },
     );
   }
 }
 
 class LikeProductWidget extends StatefulWidget {
-  final List<Map<String, dynamic>> products;
-  final int index;
+  final ProductsModel product;
 
-  const LikeProductWidget({
-    super.key,
-    required this.products,
-    required this.index,
-  });
+  const LikeProductWidget({super.key, required this.product});
 
   @override
   State<LikeProductWidget> createState() => _LikeProductWidgetState();
 }
 
 class _LikeProductWidgetState extends State<LikeProductWidget> {
+  bool liked = false;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -95,8 +59,7 @@ class _LikeProductWidgetState extends State<LikeProductWidget> {
       left: 160,
       child: InkWell(
         onTap: () {
-          widget.products[widget.index]['liked'] =
-              !widget.products[widget.index]['liked'];
+          liked = !liked;
           setState(() {});
         },
         child: Container(
@@ -107,11 +70,7 @@ class _LikeProductWidgetState extends State<LikeProductWidget> {
           width: 30,
           height: 30,
           alignment: Alignment.center,
-          child: Image.asset(
-            widget.products[widget.index]['liked']
-                ? AppIcons.redHeart
-                : AppIcons.heart,
-          ),
+          child: Image.asset(liked ? AppIcons.redHeart : AppIcons.heart),
         ),
       ),
     );
@@ -119,14 +78,9 @@ class _LikeProductWidgetState extends State<LikeProductWidget> {
 }
 
 class DiscountRateWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> products;
-  final int index;
+  final ProductsModel product;
 
-  const DiscountRateWidget({
-    super.key,
-    required this.products,
-    required this.index,
-  });
+  const DiscountRateWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +96,7 @@ class DiscountRateWidget extends StatelessWidget {
         width: 52,
         alignment: Alignment.center,
         child: Text(
-          '${(products[index]['discount'] * 100).toStringAsFixed(0)}% off',
+          '${(product.discountPercentage).toStringAsFixed(0)}% off',
           style: AppTextStyle.body(size: 10),
         ),
       ),
@@ -151,27 +105,22 @@ class DiscountRateWidget extends StatelessWidget {
 }
 
 class ProductPriceWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> products;
-  final int index;
+  final ProductsModel product;
 
-  const ProductPriceWidget({
-    super.key,
-    required this.products,
-    required this.index,
-  });
+  const ProductPriceWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
-          '\$${products[index]['priceAfterDiscount'].toStringAsFixed(2)}',
+          '\$${((product.price) - ((product.price) * (product.discountPercentage / 100))).toStringAsFixed(2)}',
           style: AppTextStyle.body(size: 12),
         ),
         const SizedBox(width: 8),
-        if (products[index]['hasDiscount'])
+        if (product.discountPercentage != 0.0)
           Text(
-            '\$${products[index]['price'].toStringAsFixed(2)}',
+            '\$${product.price.toStringAsFixed(2)}',
             style: AppTextStyle.body(size: 10, color: AppColors.borderColor),
           ),
       ],
@@ -180,21 +129,16 @@ class ProductPriceWidget extends StatelessWidget {
 }
 
 class ProductImageWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> products;
-  final int index;
+  final ProductsModel product;
 
-  const ProductImageWidget({
-    super.key,
-    required this.products,
-    required this.index,
-  });
+  const ProductImageWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(products[index]['image']),
+          image: NetworkImage(product.images[0]),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(8),
