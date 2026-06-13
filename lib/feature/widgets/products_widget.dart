@@ -26,7 +26,7 @@ class ProductsWidget extends StatelessWidget {
             Stack(
               children: [
                 ProductImageWidget(product: product),
-                if (product.discountPercentage != 0.0)
+                if (product.discountPercentage.toInt() != 0)
                   DiscountRateWidget(product: product),
                 LikeProductWidget(product: product),
               ],
@@ -118,7 +118,7 @@ class ProductPriceWidget extends StatelessWidget {
           style: AppTextStyle.body(size: 12),
         ),
         const SizedBox(width: 8),
-        if (product.discountPercentage != 0.0)
+        if (product.discountPercentage.toInt() != 0)
           Text(
             '\$${product.price.toStringAsFixed(2)}',
             style: AppTextStyle.body(size: 10, color: AppColors.borderColor),
@@ -137,6 +137,7 @@ class ProductImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: AppColors.secondryColor,
         image: DecorationImage(
           image: NetworkImage(product.images[0]),
           fit: BoxFit.cover,
