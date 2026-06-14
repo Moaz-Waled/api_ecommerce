@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
       if (controller.position.atEdge) {
         ignoring = controller.position.pixels == 0.0;
         setState(() {});
-        print(controller.position.pixels);
       }
     });
     super.initState();
