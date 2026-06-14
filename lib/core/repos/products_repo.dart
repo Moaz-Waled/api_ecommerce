@@ -64,4 +64,22 @@ class ProductsRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, List<ProductsModel>>> searchProduct(
+    String search,
+  ) async {
+    try {
+      final response = await api.get(
+        ApiEndpoint.search,
+        queryPrameters: {'q': search},
+      );
+      final products = (response['products'] as List)
+          .map((e) => ProductsModel.fromJson(e))
+          .toList();
+
+      return Right(products);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

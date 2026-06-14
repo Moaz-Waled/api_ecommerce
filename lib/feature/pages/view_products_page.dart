@@ -14,9 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ViewProductsPage extends StatefulWidget {
+  final String? search;
   final CategoriesModel? category;
 
-  const ViewProductsPage({super.key, this.category});
+  const ViewProductsPage({super.key, this.category, this.search});
 
   @override
   State<ViewProductsPage> createState() => _ViewProductsPageState();
@@ -27,7 +28,9 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
 
   @override
   void initState() {
-    if (widget.category != null) {
+    if (widget.search != null) {
+      context.read<ProductsCubit>().searchProduct();
+    } else if (widget.category != null) {
       context.read<ProductsCubit>().getCategoryProducts(widget.category!.slug);
     } else {
       context.read<ProductsCubit>().getAllProducts();
@@ -62,8 +65,18 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
             children: [
               SearchTextField(),
               const SizedBox(height: 16),
-              ProductsTitleBar(category: widget.category),
+              ProductsTitleBar(
+                category: widget.category,
+                search: widget.search,
+              ),
               const SizedBox(height: 16),
+              if (state is ViewProductsSuccess && products.isEmpty)
+                Center(
+                  child: Text(
+                    'No result for \'${widget.search}\'',
+                    style: AppTextStyle.body(size: 20),
+                  ),
+                ),
               state is ViewProductsLoading
                   ? Padding(
                       padding: const EdgeInsets.only(top: 300),

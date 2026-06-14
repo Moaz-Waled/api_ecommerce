@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class ProductsTitleBar extends StatelessWidget {
   final CategoriesModel? category;
+  final String? search;
 
-  const ProductsTitleBar({super.key, this.category});
+  const ProductsTitleBar({super.key, this.category, this.search});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,11 @@ class ProductsTitleBar extends StatelessWidget {
               ),
             ),
             Text(
-              category == null ? 'All Products' : category!.name,
+              category == null && search == null
+                  ? 'All Products'
+                  : search == null
+                  ? category!.name
+                  : 'Results',
               style: AppTextStyle.body(family: 'InterMedium'),
             ),
           ],

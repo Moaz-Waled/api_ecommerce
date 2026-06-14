@@ -1,11 +1,13 @@
 import 'package:e_commerce/core/repos/products_repo.dart';
 import 'package:e_commerce/cubit/products_state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductsCubit extends Cubit<ProductsState> {
   ProductsCubit(this.productsRepo) : super(ProductsInitial());
 
   final ProductsRepo productsRepo;
+  final TextEditingController search = TextEditingController();
 
   Future<void> getProducts() async {
     emit(GetProductsLoading());
@@ -40,6 +42,16 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> getCategoryProducts(String categorySlug) async {
     emit(ViewProductsLoading());
     final response = await productsRepo.getCategoryProducts(categorySlug);
+
+    response.fold(
+      (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(ViewProductsSuccess(products: products)),
+    );
+  }
+
+  Future<void> searchProduct() async {
+    emit(ViewProductsLoading());
+    final response = await productsRepo.searchProduct(search.text);
 
     response.fold(
       (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
