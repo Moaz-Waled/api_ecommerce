@@ -103,9 +103,9 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 488),
                               SizedBox(
                                 height: 488,
-                                child: IgnorePointer(
+                                child: ProductsWidget(
+                                  products: products,
                                   ignoring: ignoring,
-                                  child: ProductsWidget(products: products),
                                 ),
                               ),
                             ],

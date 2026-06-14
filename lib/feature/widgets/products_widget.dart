@@ -7,12 +7,16 @@ import 'package:flutter/material.dart';
 
 class ProductsWidget extends StatelessWidget {
   final List<ProductsModel> products;
+  final bool? ignoring;
 
-  const ProductsWidget({super.key, required this.products});
+  const ProductsWidget({super.key, required this.products, this.ignoring});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      physics: ignoring != null && ignoring!
+          ? NeverScrollableScrollPhysics()
+          : null,
       shrinkWrap: true,
       itemCount: products.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
