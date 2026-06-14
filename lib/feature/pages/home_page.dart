@@ -25,12 +25,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CategoriesModel> categories = [];
   List<ProductsModel> products = [];
+  ScrollController controller = ScrollController();
+  bool ignoring = true;
 
   @override
   void initState() {
     context.read<ProductsCubit>().getCategories();
     context.read<ProductsCubit>().getProducts();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        ignoring = controller.position.pixels == 0.0;
+        setState(() {});
+        print(controller.position.pixels);
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,17 +84,36 @@ class _HomePageState extends State<HomePage> {
               : Column(
                   children: [
                     SearchTextField(),
-                    const SizedBox(height: 16),
-                    SizedBox(height: 200, child: BannersView()),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      height: 45,
-                      child: CategoriesWidget(categories: categories),
+                    Expanded(
+                      child: ListView(
+                        controller: controller,
+                        shrinkWrap: true,
+                        children: [
+                          const SizedBox(height: 16),
+                          SizedBox(height: 200, child: BannersView()),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            height: 45,
+                            child: CategoriesWidget(categories: categories),
+                          ),
+                          const SizedBox(height: 32),
+                          ProductsTitle(),
+                          const SizedBox(height: 12),
+                          Stack(
+                            children: [
+                              const SizedBox(height: 488),
+                              SizedBox(
+                                height: 488,
+                                child: IgnorePointer(
+                                  ignoring: ignoring,
+                                  child: ProductsWidget(products: products),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 32),
-                    ProductsTitle(),
-                    const SizedBox(height: 12),
-                    Expanded(child: ProductsWidget(products: products)),
                   ],
                 ),
         );
