@@ -2,8 +2,11 @@ import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_images.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
 import 'package:e_commerce/core/models/products/products_model.dart';
+import 'package:e_commerce/cubit/products_cubit.dart';
+import 'package:e_commerce/cubit/products_state.dart';
 import 'package:e_commerce/feature/pages/single_product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductsWidget extends StatelessWidget {
   final List<ProductsModel> products;
@@ -59,35 +62,39 @@ class ProductsWidget extends StatelessWidget {
   }
 }
 
-class LikeProductWidget extends StatefulWidget {
+class LikeProductWidget extends StatelessWidget {
   final ProductsModel product;
 
   const LikeProductWidget({super.key, required this.product});
 
   @override
-  State<LikeProductWidget> createState() => _LikeProductWidgetState();
-}
-
-class _LikeProductWidgetState extends State<LikeProductWidget> {
-  bool liked = false;
-
-  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        liked = !liked;
-        setState(() {});
+    return BlocBuilder<ProductsCubit, ProductsState>(
+      builder: (context, state) {
+        final productCubit = context.read<ProductsCubit>();
+        final liked = productCubit.getFavouritesId().contains(
+          product.id.toString(),
+        );
+        return InkWell(
+          onTap: () {
+            if (liked) {
+              productCubit.removeFromFavourites(product.id);
+            } else {
+              productCubit.addToFavourites(product.id);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.secondryColor,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            width: 30,
+            height: 30,
+            alignment: Alignment.center,
+            child: Image.asset(liked ? AppIcons.redHeart : AppIcons.heart),
+          ),
+        );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.secondryColor,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        width: 30,
-        height: 30,
-        alignment: Alignment.center,
-        child: Image.asset(liked ? AppIcons.redHeart : AppIcons.heart),
-      ),
     );
   }
 }

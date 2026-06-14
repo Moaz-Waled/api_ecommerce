@@ -16,8 +16,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ViewProductsPage extends StatefulWidget {
   final String? search;
   final CategoriesModel? category;
+  final bool? favourites;
 
-  const ViewProductsPage({super.key, this.category, this.search});
+  const ViewProductsPage({
+    super.key,
+    this.category,
+    this.search,
+    this.favourites,
+  });
 
   @override
   State<ViewProductsPage> createState() => _ViewProductsPageState();
@@ -25,10 +31,16 @@ class ViewProductsPage extends StatefulWidget {
 
 class _ViewProductsPageState extends State<ViewProductsPage> {
   List<ProductsModel> products = [];
+  int? currentIndex;
 
   @override
   void initState() {
-    if (widget.search != null) {
+    if (widget.favourites ?? false) {
+      context.read<ProductsCubit>().getFavourites();
+      setState(() {
+        currentIndex = 1;
+      });
+    } else if (widget.search != null) {
       context.read<ProductsCubit>().searchProduct();
     } else if (widget.category != null) {
       context.read<ProductsCubit>().getCategoryProducts(widget.category!.slug);
@@ -53,7 +65,7 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.primaryColor,
-          bottomNavigationBar: HomeNavigationBar(),
+          bottomNavigationBar: HomeNavigationBar(currentIndex: currentIndex),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: AppColors.primaryColor,
@@ -68,12 +80,15 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
               ProductsTitleBar(
                 category: widget.category,
                 search: widget.search,
+                favourites: widget.favourites,
               ),
               const SizedBox(height: 16),
               if (state is ViewProductsSuccess && products.isEmpty)
                 Center(
                   child: Text(
-                    'No result for \'${widget.search}\'',
+                    widget.search != null
+                        ? 'No result for \'${widget.search}\''
+                        : 'No favourites',
                     style: AppTextStyle.body(size: 20),
                   ),
                 ),

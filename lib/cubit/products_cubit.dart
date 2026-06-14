@@ -1,3 +1,4 @@
+import 'package:e_commerce/cache/cache_helper.dart';
 import 'package:e_commerce/core/repos/products_repo.dart';
 import 'package:e_commerce/cubit/products_state.dart';
 import 'package:flutter/widgets.dart';
@@ -52,6 +53,36 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> searchProduct() async {
     emit(ViewProductsLoading());
     final response = await productsRepo.searchProduct(search.text);
+
+    response.fold(
+      (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(ViewProductsSuccess(products: products)),
+    );
+  }
+
+  void addToFavourites(int id) {
+    List<String> favourites =
+        CacheHelper().getDataStringList(key: 'favourites') ?? [];
+    favourites.add(id.toString());
+    CacheHelper().saveData(key: 'favourites', value: favourites);
+    emit(ToggleFavourite());
+  }
+
+  void removeFromFavourites(int id) {
+    List<String> favourites;
+    favourites = CacheHelper().getDataStringList(key: 'favourites')!;
+    favourites.remove(id.toString());
+    CacheHelper().saveData(key: 'favourites', value: favourites);
+    emit(ToggleFavourite());
+  }
+
+  List<String> getFavouritesId() {
+    return CacheHelper().getDataStringList(key: 'favourites') ?? [];
+  }
+
+  Future<void> getFavourites() async {
+    emit(ViewProductsLoading());
+    final response = await productsRepo.getFavouriteProducts();
 
     response.fold(
       (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),

@@ -26,6 +26,7 @@ final class GetCategoriesFailure extends ProductsState {
 
   GetCategoriesFailure({required this.errorMessage});
 }
+
 final class GetCategoriesSuccess extends ProductsState {
   final List<CategoriesModel> categories;
 
@@ -45,3 +46,5 @@ final class ViewProductsSuccess extends ProductsState {
 
   ViewProductsSuccess({required this.products});
 }
+
+final class ToggleFavourite extends ProductsState {}

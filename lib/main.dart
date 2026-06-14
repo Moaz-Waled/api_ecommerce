@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:e_commerce/cache/cache_helper.dart';
 import 'package:e_commerce/core/api/dio_consumer.dart';
 import 'package:e_commerce/core/repos/products_repo.dart';
 import 'package:e_commerce/cubit/products_cubit.dart';
@@ -6,7 +7,9 @@ import 'package:e_commerce/feature/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper().init();
   runApp(
     BlocProvider(
       create: (context) =>

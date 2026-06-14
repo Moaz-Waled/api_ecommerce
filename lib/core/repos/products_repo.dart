@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:e_commerce/cache/cache_helper.dart';
 import 'package:e_commerce/core/api/api_consumer.dart';
 import 'package:e_commerce/core/api/api_endpoint.dart';
 import 'package:e_commerce/core/errors/exceptions.dart';
@@ -76,6 +78,25 @@ class ProductsRepo {
       final products = (response['products'] as List)
           .map((e) => ProductsModel.fromJson(e))
           .toList();
+
+      return Right(products);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, List<ProductsModel>>> getFavouriteProducts() async {
+    try {
+      List<ProductsModel> products = [];
+      final productsId =
+          CacheHelper().getDataStringList(key: 'favourites') ?? [];
+      for (int i = 0; i < productsId.length; i++) {
+        final response = await api.get(
+          '${ApiEndpoint.getProducts}/${productsId[i]}',
+        );
+        final product = ProductsModel.fromJson(response);
+        products.add(product);
+      }
 
       return Right(products);
     } on ServerException catch (e) {

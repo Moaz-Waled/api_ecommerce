@@ -61,8 +61,9 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.primaryColor,
-          bottomNavigationBar: HomeNavigationBar(),
+          bottomNavigationBar: HomeNavigationBar(currentIndex: 0),
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: AppColors.primaryColor,
             title: HomeBarTitle(),
             actions: [NotificationIcon(onTap: () {})],

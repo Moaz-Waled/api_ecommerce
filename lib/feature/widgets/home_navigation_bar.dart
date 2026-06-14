@@ -1,40 +1,43 @@
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_images.dart';
+import 'package:e_commerce/feature/pages/view_products_page.dart';
 import 'package:flutter/material.dart';
 
-class HomeNavigationBar extends StatefulWidget {
-  const HomeNavigationBar({super.key});
+class HomeNavigationBar extends StatelessWidget {
+  final int? currentIndex;
 
-  @override
-  State<HomeNavigationBar> createState() => _HomeNavigationBarState();
-}
-
-class _HomeNavigationBarState extends State<HomeNavigationBar> {
-  int currentIndex = 0;
+  const HomeNavigationBar({super.key, this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: AppColors.primaryColor,
-      currentIndex: currentIndex,
+      currentIndex: currentIndex ?? 0,
       onTap: (value) {
-        currentIndex = value;
-        setState(() {});
+        if (value == 1 && value != currentIndex) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ViewProductsPage(favourites: true),
+            ),
+          );
+        } else if (value == 0 && value != currentIndex) {
+          Navigator.of(context).pop();
+        }
       },
       items: [
         BottomNavigationBarItem(
           icon: Image.asset(AppIcons.home),
-          activeIcon: Image.asset(AppIcons.activeHome),
+          activeIcon: Image.asset(AppIcons.home),
           label: '',
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset(AppIcons.cart),
-          activeIcon: Image.asset(
-            AppIcons.cart,
-            color: AppColors.secondryColor,
-          ),
-          label: '',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Image.asset(AppIcons.cart),
+        //   activeIcon: Image.asset(
+        //     AppIcons.cart,
+        //     color: AppColors.secondryColor,
+        //   ),
+        //   label: '',
+        // ),
         BottomNavigationBarItem(
           icon: Image.asset(AppIcons.favourites),
           activeIcon: Image.asset(
