@@ -2,6 +2,7 @@ import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_images.dart';
 import 'package:e_commerce/core/constants/app_text_style.dart';
 import 'package:e_commerce/core/models/products/products_model.dart';
+import 'package:e_commerce/feature/pages/single_product.dart';
 import 'package:flutter/material.dart';
 
 class ProductsWidget extends StatelessWidget {
@@ -20,20 +21,33 @@ class ProductsWidget extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         ProductsModel product = products[index];
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                ProductImageWidget(product: product),
-                if (product.discountPercentage.toInt() != 0)
-                  DiscountRateWidget(product: product),
-                LikeProductWidget(product: product),
-              ],
-            ),
-            Text(product.title, style: AppTextStyle.body(size: 16)),
-            ProductPriceWidget(product: product),
-          ],
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SingleProductPage(product: product),
+              ),
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  ProductImageWidget(product: product),
+                  if (product.discountPercentage.toInt() != 0)
+                    DiscountRateWidget(product: product),
+                  Positioned(
+                    top: 7,
+                    left: 160,
+                    child: LikeProductWidget(product: product),
+                  ),
+                ],
+              ),
+              Text(product.title, style: AppTextStyle.body(size: 16)),
+              ProductPriceWidget(product: product),
+            ],
+          ),
         );
       },
     );
@@ -54,24 +68,20 @@ class _LikeProductWidgetState extends State<LikeProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 7,
-      left: 160,
-      child: InkWell(
-        onTap: () {
-          liked = !liked;
-          setState(() {});
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.secondryColor,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          width: 30,
-          height: 30,
-          alignment: Alignment.center,
-          child: Image.asset(liked ? AppIcons.redHeart : AppIcons.heart),
+    return InkWell(
+      onTap: () {
+        liked = !liked;
+        setState(() {});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.secondryColor,
+          borderRadius: BorderRadius.circular(50),
         ),
+        width: 30,
+        height: 30,
+        alignment: Alignment.center,
+        child: Image.asset(liked ? AppIcons.redHeart : AppIcons.heart),
       ),
     );
   }

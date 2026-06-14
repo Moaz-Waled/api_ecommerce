@@ -28,4 +28,8 @@ class AppIcons {
   static String arrowLeft = 'assets/icons/arrowLeft.png';
   static String edit = 'assets/icons/edit.png';
   static String menu = 'assets/icons/menu.png';
+  static String blackArrowLeft = 'assets/icons/blackArrowLeft.png';
+  static String share = 'assets/icons/share.png';
+  static String yellowStar = 'assets/icons/yellowStar.png';
+  static String emptyStar = 'assets/icons/emptyStar.png';
 }

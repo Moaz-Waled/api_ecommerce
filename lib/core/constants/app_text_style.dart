@@ -11,12 +11,20 @@ class AppTextStyle {
     );
   }
 
-  static TextStyle body({double? size, Color? color, FontWeight? weight, String? family}) {
+  static TextStyle body({
+    double? size,
+    Color? color,
+    FontWeight? weight,
+    String? family,
+    TextDecoration? decoration,
+  }) {
     return TextStyle(
       fontSize: size ?? 14,
       fontWeight: weight ?? FontWeight.w400,
       fontFamily: family ?? 'PoppinsMedium',
       color: color ?? AppColors.secondryColor,
+      decoration: decoration,
+      decorationColor: AppColors.borderColor,
     );
   }
 }
