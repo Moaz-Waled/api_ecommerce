@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:e_commerce/cache/cache_helper.dart';
 import 'package:e_commerce/core/api/api_consumer.dart';
 import 'package:e_commerce/core/api/api_endpoint.dart';
