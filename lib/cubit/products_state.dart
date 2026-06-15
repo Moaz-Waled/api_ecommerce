@@ -48,3 +48,17 @@ final class ViewProductsSuccess extends ProductsState {
 }
 
 final class ToggleFavourite extends ProductsState {}
+
+final class GetSimilarProductsLoading extends ProductsState {}
+
+final class GetSimilarProductsFailure extends ProductsState {
+  final String errorMessage;
+
+  GetSimilarProductsFailure({required this.errorMessage});
+}
+
+final class GetSimilarProductsSuccess extends ProductsState {
+  final List<ProductsModel> products;
+
+  GetSimilarProductsSuccess({required this.products});
+}

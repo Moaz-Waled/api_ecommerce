@@ -89,4 +89,15 @@ class ProductsCubit extends Cubit<ProductsState> {
       (products) => emit(ViewProductsSuccess(products: products)),
     );
   }
+
+  Future<void> getSimilarProducts(String categorySlug) async {
+    emit(GetSimilarProductsLoading());
+    final response = await productsRepo.getSimilarProducts(categorySlug);
+
+    response.fold(
+      (errorMessage) =>
+          emit(GetSimilarProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(GetSimilarProductsSuccess(products: products)),
+    );
+  }
 }

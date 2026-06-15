@@ -32,4 +32,8 @@ class AppIcons {
   static String share = 'assets/icons/share.png';
   static String yellowStar = 'assets/icons/yellowStar.png';
   static String emptyStar = 'assets/icons/emptyStar.png';
+  static String minus = 'assets/icons/minus.png';
+  static String plus = 'assets/icons/plus.png';
+  static String blackBag = 'assets/icons/blackBag.png';
+  static String arrowRight = 'assets/icons/arrowRight.png';
 }
