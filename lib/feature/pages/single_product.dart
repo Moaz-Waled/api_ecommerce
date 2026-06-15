@@ -197,6 +197,7 @@ class _SingleProductPageState extends State<SingleProductPage> {
                               ),
                               const SizedBox(height: 12),
                               ProductsWidget(products: similarProducts),
+                              const SizedBox(height: 32),
                             ],
                           ),
                         ),

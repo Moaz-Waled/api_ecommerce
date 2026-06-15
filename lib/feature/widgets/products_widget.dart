@@ -48,7 +48,7 @@ class ProductsWidget extends StatelessWidget {
                     DiscountRateWidget(product: product),
                   Positioned(
                     top: 7,
-                    left: 160,
+                    left: 150,
                     child: LikeProductWidget(product: product),
                   ),
                 ],

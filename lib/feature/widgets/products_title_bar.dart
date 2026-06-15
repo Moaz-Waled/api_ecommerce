@@ -23,12 +23,16 @@ class ProductsTitleBar extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Image.asset(AppIcons.arrowLeft),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(AppIcons.arrowLeft),
+                ),
               ),
             ),
             Text(
