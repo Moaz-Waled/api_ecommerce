@@ -100,4 +100,36 @@ class ProductsCubit extends Cubit<ProductsState> {
       (products) => emit(GetSimilarProductsSuccess(products: products)),
     );
   }
+
+  void addToCart(int id) {
+    List<String> cartId = CacheHelper().getDataStringList(key: 'cart') ?? [];
+    if (cartId.contains(id.toString())) {
+      final idList = [];
+      for (int i = 0; i < cartId.length; i++) {
+        if (cartId[i] == id.toString()) {
+          idList.add(cartId[i]);
+        }
+      }
+      if (idList.length >= 10) return;
+    }
+    cartId.add(id.toString());
+    CacheHelper().saveData(key: 'cart', value: cartId);
+  }
+
+  void rmoveFromCart(int id) {
+    List<String> cartId = CacheHelper().getDataStringList(key: 'cart')!;
+    cartId.remove(id.toString());
+    CacheHelper().saveData(key: 'cart', value: cartId);
+  }
+
+  Future<void> getCartProducts() async {
+    emit(GetCartProductsLoading());
+    final response = await productsRepo.getCartProducts();
+
+    response.fold(
+      (errorMessage) =>
+          emit(GetCartProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(GetCartProductsSuccess(products: products)),
+    );
+  }
 }

@@ -158,7 +158,20 @@ class _SingleProductPageState extends State<SingleProductPage> {
                                 children: [
                                   Expanded(
                                     child: GeneralButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        for (int i = 0; i < quantity; i++) {
+                                          context
+                                              .read<ProductsCubit>()
+                                              .addToCart(widget.product.id);
+                                        }
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Added To Cart'),
+                                          ),
+                                        );
+                                      },
                                       icon: AppIcons.cart,
                                       text: 'Add to cart',
                                     ),

@@ -8,6 +8,7 @@ class GeneralButton extends StatelessWidget {
   final String icon;
   final String text;
   final Color? textColor;
+  final double? height;
 
   const GeneralButton({
     super.key,
@@ -16,6 +17,7 @@ class GeneralButton extends StatelessWidget {
     required this.icon,
     required this.text,
     this.textColor,
+    this.height,
   });
 
   @override
@@ -27,7 +29,7 @@ class GeneralButton extends StatelessWidget {
         side: BorderSide(width: 1.5, color: AppColors.secondryColor),
       ),
       color: color,
-      height: 44,
+      height: height ?? 44,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

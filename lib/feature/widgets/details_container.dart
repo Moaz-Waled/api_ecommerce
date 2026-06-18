@@ -32,7 +32,7 @@ class _DetailsContainerState extends State<DetailsContainer> {
         borderRadius: BorderRadius.circular(6),
       ),
       height: widget.forReviews && expanded
-          ? 250
+          ? (100 * widget.product.reviews.length).toDouble()
           : expanded && !widget.forReviews
           ? 100
           : 50,
@@ -80,6 +80,8 @@ class _DetailsContainerState extends State<DetailsContainer> {
           if (expanded && widget.forReviews)
             Expanded(
               child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 itemCount: widget.product.reviews.length,
                 itemBuilder: (context, index) {

@@ -120,4 +120,23 @@ class ProductsRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, List<ProductsModel>>> getCartProducts() async {
+    try {
+      List<ProductsModel> products = [];
+      List<String> productsId =
+          CacheHelper().getDataStringList(key: 'cart') ?? [];
+      for (int i = 0; i < productsId.length; i++) {
+        final response = await api.get(
+          '${ApiEndpoint.getProducts}/${productsId[i]}',
+        );
+        final product = ProductsModel.fromJson(response);
+        products.add(product);
+      }
+
+      return Right(products);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

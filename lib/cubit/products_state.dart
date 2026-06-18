@@ -62,3 +62,17 @@ final class GetSimilarProductsSuccess extends ProductsState {
 
   GetSimilarProductsSuccess({required this.products});
 }
+
+final class GetCartProductsLoading extends ProductsState {}
+
+final class GetCartProductsFailure extends ProductsState {
+  final String errorMessage;
+
+  GetCartProductsFailure({required this.errorMessage});
+}
+
+final class GetCartProductsSuccess extends ProductsState {
+  final List<ProductsModel> products;
+
+  GetCartProductsSuccess({required this.products});
+}
