@@ -4,6 +4,7 @@ import 'package:e_commerce/core/constants/app_text_style.dart';
 import 'package:e_commerce/core/models/products/products_model.dart';
 import 'package:e_commerce/cubit/products_cubit.dart';
 import 'package:e_commerce/cubit/products_state.dart';
+import 'package:e_commerce/feature/pages/payment_page.dart';
 import 'package:e_commerce/feature/widgets/details_container.dart';
 import 'package:e_commerce/feature/widgets/general_button.dart';
 import 'package:e_commerce/feature/widgets/product_images_view.dart';
@@ -179,7 +180,13 @@ class _SingleProductPageState extends State<SingleProductPage> {
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: GeneralButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) => PaymentPage(),
+                                          ),
+                                        );
+                                      },
                                       color: AppColors.secondryColor,
                                       textColor: AppColors.blackColor,
                                       icon: AppIcons.blackBag,

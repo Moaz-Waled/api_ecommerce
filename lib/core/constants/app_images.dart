@@ -38,4 +38,5 @@ class AppIcons {
   static String arrowRight = 'assets/icons/arrowRight.png';
   static String delete = 'assets/icons/delete.png';
   static String blackCart = 'assets/icons/blackCart.png';
+  static String payment = 'assets/icons/payment.png';
 }

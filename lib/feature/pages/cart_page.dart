@@ -4,6 +4,7 @@ import 'package:e_commerce/core/constants/app_text_style.dart';
 import 'package:e_commerce/core/models/products/products_model.dart';
 import 'package:e_commerce/cubit/products_cubit.dart';
 import 'package:e_commerce/cubit/products_state.dart';
+import 'package:e_commerce/feature/pages/payment_page.dart';
 import 'package:e_commerce/feature/widgets/cart_items_details.dart';
 import 'package:e_commerce/feature/widgets/cart_products.dart';
 import 'package:e_commerce/feature/widgets/general_button.dart';
@@ -93,7 +94,13 @@ class _CartPageState extends State<CartPage> {
                         CartItemsDetails(products: products),
                         const SizedBox(height: 32),
                         GeneralButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => PaymentPage(),
+                              ),
+                            );
+                          },
                           height: 56,
                           color: AppColors.secondryColor,
                           icon: AppIcons.blackCart,
