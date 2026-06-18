@@ -19,7 +19,7 @@ class PaymentPage extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 32.0),
+                padding: const EdgeInsets.only(bottom: 48.0),
                 child: GeneralButton(
                   height: 56,
                   color: AppColors.secondryColor,

@@ -48,7 +48,7 @@ class CartProducts extends StatelessWidget {
                     ),
                     const SizedBox(width: 16.0),
                     SizedBox(
-                      width: 180,
+                      width: 165,
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

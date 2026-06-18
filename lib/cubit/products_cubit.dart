@@ -132,4 +132,8 @@ class ProductsCubit extends Cubit<ProductsState> {
       (products) => emit(GetCartProductsSuccess(products: products)),
     );
   }
+
+  void cartCheckOut() {
+    CacheHelper().removeData(key: 'cart');
+  }
 }

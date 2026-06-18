@@ -95,6 +95,7 @@ class _CartPageState extends State<CartPage> {
                         const SizedBox(height: 32),
                         GeneralButton(
                           onPressed: () {
+                            context.read<ProductsCubit>().cartCheckOut();
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => PaymentPage(),
