@@ -38,7 +38,7 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
     if (widget.favourites ?? false) {
       context.read<ProductsCubit>().getFavourites();
       setState(() {
-        currentIndex = 1;
+        currentIndex = 2;
       });
     } else if (widget.search != null) {
       context.read<ProductsCubit>().searchProduct();

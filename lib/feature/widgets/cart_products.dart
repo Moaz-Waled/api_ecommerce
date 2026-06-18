@@ -49,25 +49,27 @@ class CartProducts extends StatelessWidget {
                     const SizedBox(width: 16.0),
                     SizedBox(
                       width: 180,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.title,
-                            style: AppTextStyle.body(
-                              size: 18,
-                              weight: FontWeight.normal,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product.title,
+                              style: AppTextStyle.body(
+                                size: 18,
+                                weight: FontWeight.normal,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            '\$${((product.price) - (product.price * (product.discountPercentage / 100))).toStringAsFixed(2)}',
-                            style: AppTextStyle.body(
-                              family: 'InterMedium',
-                              weight: FontWeight.normal,
+                            const SizedBox(height: 8.0),
+                            Text(
+                              '\$${((product.price) - (product.price * (product.discountPercentage / 100))).toStringAsFixed(2)}',
+                              style: AppTextStyle.body(
+                                family: 'InterMedium',
+                                weight: FontWeight.normal,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
