@@ -133,8 +133,9 @@ class ProductsRepo {
         final product = ProductsModel.fromJson(response);
         products.add(product);
       }
+      final finalList = products.reversed.toList();
 
-      return Right(products);
+      return Right(finalList);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }

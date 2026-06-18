@@ -93,10 +93,18 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
                   ),
                 ),
               state is ViewProductsLoading
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 300),
-                      child: CircularProgressIndicator(
-                        color: AppColors.secondryColor,
+                  ? SizedBox(
+                      width: 40,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 300),
+                            child: CircularProgressIndicator(
+                              color: AppColors.secondryColor,
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   : state is ViewProductsFailure
