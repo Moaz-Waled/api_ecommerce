@@ -23,6 +23,23 @@ class ProductsRepo {
     }
   }
 
+  Future<Either<String, List<ProductsModel>>> getProductsWithPagination({
+    required int skip,
+  }) async {
+    try {
+      final response = await api.get(
+        ApiEndpoint.getProducts,
+        queryPrameters: {'limit': 6, 'skip': skip},
+      );
+      final products = (response['products'] as List)
+          .map((e) => ProductsModel.fromJson(e))
+          .toList();
+      return Right(products);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
   Future<Either<String, List<CategoriesModel>>> getCategories() async {
     try {
       final response = await api.get(ApiEndpoint.getCategories);
@@ -51,11 +68,13 @@ class ProductsRepo {
   }
 
   Future<Either<String, List<ProductsModel>>> getCategoryProducts(
-    String categorySlug,
-  ) async {
+    String categorySlug, {
+    required int skip,
+  }) async {
     try {
       final response = await api.get(
         ApiEndpoint.getCategoryProducts(categorySlug),
+        queryPrameters: {'limit': 6, 'skip': skip},
       );
       final products = (response['products'] as List)
           .map((e) => ProductsModel.fromJson(e))
@@ -67,12 +86,12 @@ class ProductsRepo {
   }
 
   Future<Either<String, List<ProductsModel>>> searchProduct(
-    String search,
+    String search, {required int skip}
   ) async {
     try {
       final response = await api.get(
         ApiEndpoint.search,
-        queryPrameters: {'q': search},
+        queryPrameters: {'q': search, 'limit' : 6, 'skip' : skip},
       );
       final products = (response['products'] as List)
           .map((e) => ProductsModel.fromJson(e))

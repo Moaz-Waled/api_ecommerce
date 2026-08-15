@@ -32,6 +32,9 @@ class ViewProductsPage extends StatefulWidget {
 class _ViewProductsPageState extends State<ViewProductsPage> {
   List<ProductsModel> products = [];
   int? currentIndex;
+  int skip = 0;
+  bool isLoadingMore = false;
+  bool end = false;
 
   @override
   void initState() {
@@ -41,11 +44,14 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
         currentIndex = 2;
       });
     } else if (widget.search != null) {
-      context.read<ProductsCubit>().searchProduct();
+      context.read<ProductsCubit>().searchProduct(skip: skip);
     } else if (widget.category != null) {
-      context.read<ProductsCubit>().getCategoryProducts(widget.category!.slug);
+      context.read<ProductsCubit>().getCategoryProducts(
+        widget.category!.slug,
+        skip: skip,
+      );
     } else {
-      context.read<ProductsCubit>().getAllProducts();
+      context.read<ProductsCubit>().getAllProducts(skip: skip);
     }
     super.initState();
   }
@@ -55,7 +61,16 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
     return BlocConsumer<ProductsCubit, ProductsState>(
       listener: (context, state) {
         if (state is ViewProductsSuccess) {
-          products = state.products;
+          if (state.products.isEmpty) {
+            end = true;
+            isLoadingMore = false;
+          } else {
+            isLoadingMore = false;
+            skip += 6;
+            products.addAll(state.products);
+          }
+        } else if (state is ViewProductsLoading) {
+          isLoadingMore = true;
         } else if (state is ViewProductsFailure) {
           ScaffoldMessenger.of(
             context,
@@ -92,7 +107,7 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
                     style: AppTextStyle.body(size: 20),
                   ),
                 ),
-              state is ViewProductsLoading
+              state is ViewProductsLoading && !isLoadingMore
                   ? SizedBox(
                       width: 40,
                       child: ListView(
@@ -114,7 +129,48 @@ class _ViewProductsPageState extends State<ViewProductsPage> {
                         style: AppTextStyle.body(),
                       ),
                     )
-                  : Expanded(child: ProductsWidget(products: products)),
+                  : Expanded(
+                      child: NotificationListener(
+                        onNotification: (ScrollNotification notification) {
+                          if (widget.favourites ?? false || end) {
+                            return false;
+                          }
+                          if (notification is ScrollEndNotification &&
+                              !isLoadingMore) {
+                            final pixels = notification.metrics.pixels;
+                            final max = notification.metrics.maxScrollExtent;
+                            final triggerDistance = 300;
+
+                            if (pixels >= max - triggerDistance) {
+                              if (widget.search != null) {
+                                context.read<ProductsCubit>().searchProduct(
+                                  skip: skip,
+                                );
+                              } else if (widget.category != null) {
+                                context
+                                    .read<ProductsCubit>()
+                                    .getCategoryProducts(
+                                      widget.category!.slug,
+                                      skip: skip,
+                                    );
+                              } else {
+                                context.read<ProductsCubit>().getAllProducts(
+                                  skip: skip,
+                                );
+                              }
+                            }
+                          }
+                          return false;
+                        },
+                        child: ProductsWidget(products: products),
+                      ),
+                    ),
+              if (isLoadingMore)
+                Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.secondryColor,
+                  ),
+                ),
             ],
           ),
         );

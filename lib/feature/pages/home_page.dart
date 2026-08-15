@@ -27,11 +27,14 @@ class _HomePageState extends State<HomePage> {
   List<ProductsModel> products = [];
   ScrollController controller = ScrollController();
   bool ignoring = true;
+  bool isLoadingMore = false;
+  int skip = 0;
+  bool end = false;
 
   @override
   void initState() {
     context.read<ProductsCubit>().getCategories();
-    context.read<ProductsCubit>().getProducts();
+    context.read<ProductsCubit>().getProductsWithPagination(skip: skip);
     controller.addListener(() {
       if (controller.position.atEdge) {
         ignoring = controller.position.pixels == 0.0;
@@ -44,6 +47,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     controller.dispose();
+    controller.removeListener(() {});
     super.dispose();
   }
 
@@ -54,8 +58,18 @@ class _HomePageState extends State<HomePage> {
         if (state is GetCategoriesSuccess) {
           categories = state.categories;
         }
+        if (state is GetProductsLoading) {
+          isLoadingMore = true;
+        }
         if (state is GetProductsSuccess) {
-          products = state.products;
+          if (state.products.isEmpty) {
+            end = true;
+            isLoadingMore = false;
+          } else {
+            isLoadingMore = false;
+            skip += 6;
+            products.addAll(state.products);
+          }
         }
       },
       builder: (context, state) {
@@ -68,7 +82,9 @@ class _HomePageState extends State<HomePage> {
             title: HomeBarTitle(),
             actions: [NotificationIcon(onTap: () {})],
           ),
-          body: state is GetCategoriesLoading || state is GetProductsLoading
+          body:
+              (state is GetCategoriesLoading || state is GetProductsLoading) &&
+                  !isLoadingMore
               ? Center(
                   child: CircularProgressIndicator(
                     color: AppColors.secondryColor,
@@ -104,13 +120,46 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 488),
                               SizedBox(
                                 height: 488,
-                                child: ProductsWidget(
-                                  products: products,
-                                  ignoring: ignoring,
+                                child: NotificationListener(
+                                  onNotification:
+                                      (ScrollNotification notification) {
+                                        if (end || skip >= 30) {
+                                          return false;
+                                        }
+                                        if (notification
+                                                is ScrollEndNotification &&
+                                            !isLoadingMore) {
+                                          final pixels =
+                                              notification.metrics.pixels;
+                                          final max = notification
+                                              .metrics
+                                              .maxScrollExtent;
+                                          final triggerDistance = 300;
+
+                                          if (pixels >= max - triggerDistance) {
+                                            context
+                                                .read<ProductsCubit>()
+                                                .getProductsWithPagination(
+                                                  skip: skip,
+                                                );
+                                          }
+                                        }
+                                        return false;
+                                      },
+                                  child: ProductsWidget(
+                                    products: products,
+                                    ignoring: ignoring,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+                          if (isLoadingMore)
+                            Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.secondryColor,
+                              ),
+                            ),
                         ],
                       ),
                     ),

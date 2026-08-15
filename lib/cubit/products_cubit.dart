@@ -20,6 +20,16 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
   }
 
+  Future<void> getProductsWithPagination({required int skip}) async {
+    emit(GetProductsLoading());
+    final response = await productsRepo.getProductsWithPagination(skip: skip);
+
+    response.fold(
+      (errorMessage) => emit(GetProductsFailure(errorMessage: errorMessage)),
+      (products) => emit(GetProductsSuccess(products: products)),
+    );
+  }
+
   Future<void> getCategories() async {
     emit(GetCategoriesLoading());
     final response = await productsRepo.getCategories();
@@ -30,9 +40,9 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
   }
 
-  Future<void> getAllProducts() async {
+  Future<void> getAllProducts({required int skip}) async {
     emit(ViewProductsLoading());
-    final response = await productsRepo.getAllProducts();
+    final response = await productsRepo.getProductsWithPagination(skip: skip);
 
     response.fold(
       (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
@@ -40,9 +50,9 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
   }
 
-  Future<void> getCategoryProducts(String categorySlug) async {
+  Future<void> getCategoryProducts(String categorySlug, {required int skip}) async {
     emit(ViewProductsLoading());
-    final response = await productsRepo.getCategoryProducts(categorySlug);
+    final response = await productsRepo.getCategoryProducts(categorySlug, skip: skip);
 
     response.fold(
       (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),
@@ -50,9 +60,9 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
   }
 
-  Future<void> searchProduct() async {
+  Future<void> searchProduct({required int skip}) async {
     emit(ViewProductsLoading());
-    final response = await productsRepo.searchProduct(search.text);
+    final response = await productsRepo.searchProduct(search.text, skip: skip);
 
     response.fold(
       (errorMessage) => emit(ViewProductsFailure(errorMessage: errorMessage)),

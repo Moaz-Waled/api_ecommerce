@@ -12,7 +12,11 @@ class ProductsWidget extends StatelessWidget {
   final List<ProductsModel> products;
   final bool? ignoring;
 
-  const ProductsWidget({super.key, required this.products, this.ignoring});
+  const ProductsWidget({
+    super.key,
+    required this.products,
+    this.ignoring,
+  });
 
   @override
   Widget build(BuildContext context) {
